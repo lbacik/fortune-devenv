@@ -1,0 +1,58 @@
+version: "3.9"
+
+networks:
+  default:
+    name: main
+    external: true
+
+services:
+
+  api:
+    build: "https://github.com/lbacik/fortune-api.git#${TAG}"
+    image: "fortune-api:${TAG}"
+    container_name: "fortune-api-${TAG}"
+    environment:
+      VIRTUAL_HOST: "${TAG}.${API_DEV_DOMAIN}"
+      VIRTUAL_PORT: 8080
+      LETSENCRYPT_HOST: "${TAG}.${API_DEV_DOMAIN}"
+      CORS: "yes"
+
+  index-build:
+    build: "https://github.com/lbacik/fortune-es.git#${TAG}"
+    image: "fortune-index-builder:${TAG}"
+    container_name: "fortune-index-builder-${TAG}"
+    environment:
+      ES_HOST: "${ES_HOST}"
+      ES_USER: "elastic"
+      ES_PASS: "${ES_PASS}"
+      ES_SCHEME: "https"
+      ES_PORT: 443
+      FORTUNE_API: "${FORTUNE_API}"
+      INDEX: "${ES_INDEX}"
+
+  search:
+    build: "https://github.com/lbacik/fortune-es-api.git#${TAG}"
+    image: "fortune-es-api:${TAG}"
+    container_name: "fortune-es-api-${TAG}"
+    environment:
+      VIRTUAL_HOST: "${TAG}.${SEARCH_DEV_DOMAIN}"
+      VIRTUAL_PORT: 8000
+      LETSENCRYPT_HOST: "${TAG}.${SEARCH_DEV_DOMAIN}"
+      ES_HOST: "${ES_HOST}"
+      ES_USER: "elastic"
+      ES_PASS: "${ES_PASS}"
+      ES_SCHEME: "https"
+      ES_PORT: 443
+      INDEX_NAME: "${ES_INDEX}"
+
+  front:
+    build:
+      context: "https://github.com/lbacik/fortune-front-react.git#${TAG_FRONT}"
+      args:
+        FORTUNE_URL: "https://${TAG}.${API_DEV_DOMAIN}"
+    image: "fortune-front:${TAG_FRONT}"
+    container_name: "fortune-front-${TAG_FRONT}"
+    environment:
+      VIRTUAL_HOST: "${TAG_FRONT}.${DEV_DOMAIN}"
+      LETSENCRYPT_HOST: "${TAG_FRONT}.${DEV_DOMAIN}"
+ 

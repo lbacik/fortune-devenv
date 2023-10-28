@@ -1,0 +1,13 @@
+TAG=main
+TAG_FRONT=main
+
+DEV_DOMAIN=dev.fortune.luka.sh
+API_DEV_DOMAIN=api.dev.fortune.luka.sh
+SEARCH_DEV_DOMAIN=search.dev.fortune.luka.sh
+
+ES_HOST="es.gw.rum.luka.sh"
+ES_PASS=""
+ES_INDEX="fortune"
+
+COMPOSE_PROJECT_NAME="fortune-api-${TAG}"
+
