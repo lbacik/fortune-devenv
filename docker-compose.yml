@@ -48,8 +48,8 @@ services:
   front:
     build:
       context: "https://github.com/lbacik/fortune-front-react.git#${TAG_FRONT}"
-      args:
-        FORTUNE_URL: "https://${TAG}.${API_DEV_DOMAIN}"
+      # args:
+      #   FORTUNE_URL: "https://${TAG}.${API_DEV_DOMAIN}"
     image: "fortune-front:${TAG_FRONT}"
     container_name: "fortune-front-${TAG_FRONT}"
     environment:
